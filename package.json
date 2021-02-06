@@ -1,7 +1,7 @@
 {
   "name": "react-better-countdown-hook",
   "version": "1.0.0",
-  "description": "A great react coutndown hook with typescript support",
+  "description": "A dead simple react countdown hook with typescript support",
   "main": "index.tsx",
   "scripts": {
     "test": "npm run test",
@@ -16,6 +16,16 @@
   "bugs": {
     "url": "https://github.com/steviekong/react-countdown-hook/issues"
   },
+  "keywords": [
+    "countdown",
+    "hook",
+    "timer",
+    "react",
+    "typescript",
+    "react-hooks",
+    "react-use-countdown",
+    "useCountdown"
+  ],
   "homepage": "https://github.com/steviekong/react-countdown-hook#readme",
   "dependencies": {
     "react": "^17.0.1",
