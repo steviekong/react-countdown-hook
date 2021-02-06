@@ -1,14 +1,13 @@
 import React, { useEffect } from "react"
 
-/** Return type of the hook */
+/** Return possible actions */
 type CountDownActions = {
   start: () => void;
   pause: () => void;
-  resume: () => void;
   reset: () => void;
 }
 
-/** Countdown values to update, used as the initial state */
+/** Countdown values to update and return, used as the initial state */
 type CountdownValues = {
    milliseconds: number;
    seconds: number;
@@ -19,8 +18,11 @@ type CountdownValues = {
 
 /** Input type */
 type CountDownInput = {
+  /** Start time in milliseconds */
   startTimeMilliseconds: number;
+  /** interval */
   interval: number,
+  /** Optional callback when the countdown reaches 0 */
   onCountDownEnd: () => any
 }
 
@@ -35,23 +37,17 @@ const useCountDown  = ({startTimeMilliseconds,interval, onCountDownEnd}: CountDo
   const [timerRunning, setTimerRunning] = React.useState<boolean>(false)
 
   const start = (): void => {
-    setTimerRunning(true);
+    if(timeLeftState.milliseconds > 0 && !timerRunning){
+      setTimerRunning(true);
+    }
   }
   
   const pause = (): void => {
     setTimerRunning(false);
   }
 
-  const resume = (): void => {
-    if(timeLeftState.milliseconds > 0){
-      setTimerRunning(true)
-    }
-    else{
-      throw "Timer not started!"
-    }
-  }
-
-  const reset = (): void => {
+  const reset = async (): Promise<void> => {
+    setTimerRunning(false);
     setTimeLeftState({
       milliseconds: startTimeMilliseconds,
       seconds: Math.floor(startTimeMilliseconds / 1000),
@@ -61,20 +57,28 @@ const useCountDown  = ({startTimeMilliseconds,interval, onCountDownEnd}: CountDo
     })
   }
 
-  useEffect((): void => {
+  const countdown = () : NodeJS.Timeout => {
+    return  setTimeout(() => (setTimeLeftState({
+      milliseconds: timeLeftState.milliseconds - interval,
+      seconds: (timeLeftState.milliseconds - interval) / 1000 > 0 ? Math.round((timeLeftState.milliseconds - interval) / 1000): 0,
+      minutes: Math.round((timeLeftState.milliseconds - interval) / (60 * 1000)),
+      hours: Math.round((timeLeftState.milliseconds - interval)  / (60 * 60 * 1000)),
+      days: Math.round((timeLeftState.milliseconds - interval) / (24 * 60 * 60 * 1000)),
+    })), interval);
+  }
+
+  useEffect(() => {
+    let clear : null | NodeJS.Timeout = null;
     if(timerRunning){
-      setTimeout(() => (setTimeLeftState({
-        milliseconds: timeLeftState.milliseconds - interval,
-        seconds: (timeLeftState.milliseconds - interval) / 1000 > 0? Math.floor((timeLeftState.milliseconds - interval) / 1000) + 1 : 0,
-        minutes: Math.floor((timeLeftState.milliseconds - interval) / (60 * 1000)),
-        hours: Math.floor((timeLeftState.milliseconds - interval)  / (60 * 60 * 1000)),
-        days: Math.floor((timeLeftState.milliseconds - interval) / (24 * 60 * 60 * 1000)),
-      })), interval)
+      clear = countdown();
     }
-  })
+    return () => {
+      clearTimeout(clear);
+    }
+  },[timeLeftState, timerRunning])
 
   useEffect((): void => {
-    if(timeLeftState.milliseconds === interval){
+    if(timeLeftState.milliseconds <= 0){
       onCountDownEnd()
       pause()
     }
@@ -90,7 +94,6 @@ const useCountDown  = ({startTimeMilliseconds,interval, onCountDownEnd}: CountDo
     start: start,
     pause: pause,
     reset: reset,
-    resume: resume
   }]
 }
 
