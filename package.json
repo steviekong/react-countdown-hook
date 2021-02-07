@@ -1,6 +1,6 @@
 {
   "name": "react-better-countdown-hook",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A dead simple react countdown hook with typescript support",
   "main": "index.tsx",
   "scripts": {
