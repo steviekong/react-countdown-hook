@@ -23,7 +23,7 @@ type CountDownInput = {
   /** interval */
   interval: number,
   /** Optional callback when the countdown reaches 0 */
-  onCountDownEnd: () => any
+  onCountDownEnd?: () => any
 }
 
 const useCountDown  = ({startTimeMilliseconds,interval, onCountDownEnd}: CountDownInput): [CountdownValues, CountDownActions] => {
@@ -54,7 +54,7 @@ const useCountDown  = ({startTimeMilliseconds,interval, onCountDownEnd}: CountDo
       minutes: Math.floor(startTimeMilliseconds / (60 * 1000)),
       hours: Math.floor(startTimeMilliseconds / (60 * 60 * 1000)),
       days: Math.floor(startTimeMilliseconds / (24 * 60 * 60 * 1000)),
-    })
+    });
   }
 
   const countdown = () : NodeJS.Timeout => {
@@ -79,7 +79,9 @@ const useCountDown  = ({startTimeMilliseconds,interval, onCountDownEnd}: CountDo
 
   useEffect((): void => {
     if(timeLeftState.milliseconds <= 0){
-      onCountDownEnd()
+      if(onCountDownEnd !== undefined){
+        onCountDownEnd()
+      }
       pause()
     }
   }, [timeLeftState])
