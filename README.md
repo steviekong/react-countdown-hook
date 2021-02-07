@@ -25,7 +25,7 @@ $ yarn add react-better-countdown-hook
 ```js
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import useCountDown from "./src/index";
+import useCountDown from "react-better-countdown-hook";
 
 const App: React.FunctionComponent = () => {
   const [
@@ -95,3 +95,7 @@ const [
 | startTimeMilliseconds | number   | false       | Start time of the timer in milliseconds      |
 | interval              | number   | false       | Value to decrement                           |
 | onCountDownEnd        | function | true        | Callback to trigger when the timer reaches 0 |
+
+## License
+
+MIT
