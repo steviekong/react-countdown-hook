@@ -36,7 +36,7 @@ const App: React.FunctionComponent = () => {
     startTimeMilliseconds: 6000,
     // Decrement to update the timer with
     interval: 500,
-    // Callback triggered when the timer hits 0
+    // Callback triggered when the timer reaches 0
     onCountDownEnd: () => {
       console.log("ended");
     },
@@ -65,6 +65,7 @@ ReactDOM.render(<App />, MOUNT_NODE);
 
 ```js
 const [
+  /** Time in milliseconds, seconds, minutes, hours, days */
   { milliseconds, seconds, minutes, hours, days },
   { start, reset, pause },
 ] = useCountDown({
@@ -72,7 +73,7 @@ const [
   startTimeMilliseconds: 6000,
   // Decrement to update the timer with
   interval: 500,
-  // Callback triggered when the timer hits 0
+  // Callback triggered when the timer reaches 0
   onCountDownEnd: () => {
     console.log("ended");
   },
@@ -80,8 +81,6 @@ const [
 ```
 
 ## Configuration
-
-The configuration and all its parameters are optional.
 
 | Property              | Type     | Is Optional | Description                                  |
 | --------------------- | -------- | ----------- | -------------------------------------------- |
